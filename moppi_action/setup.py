@@ -24,6 +24,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
+	  'gpt_server = moppi_action.gpt_action_server:main'
         ],
     },
 )
