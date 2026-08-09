@@ -5,23 +5,25 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-# find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(behaviortree_cpp REQUIRED)
 find_package(behaviortree_ros2 REQUIRED)
 find_package(moppi_interfaces REQUIRED)
 
-if(BUILD_TESTING)
-  find_package(ament_lint_auto REQUIRED)
-  # the following line skips the linter which checks for copyrights
-  # comment the line when a copyright and license is added to all source files
-  set(ament_cmake_copyright_FOUND TRUE)
-  # the following line skips cpplint (only works in a git repo)
-  # comment the line when this package is in a git repo and when
-  # a copyright and license is added to all source files
-  set(ament_cmake_cpplint_FOUND TRUE)
-  ament_lint_auto_find_test_dependencies()
-endif()
+# main.cpp를 컴파일해서 'bt_main'이라는 실행 파일을 만듦
+add_executable(bt_main src/main.cpp)
+ament_target_dependencies(bt_main
+  rclcpp
+  behaviortree_cpp
+  behaviortree_ros2
+  moppi_interfaces
+)
+
+# 만든 실행 파일을 install 폴더로 복사 (ros2 run으로 실행할 수 있게 함)
+install(TARGETS bt_main
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 ament_package()
+
