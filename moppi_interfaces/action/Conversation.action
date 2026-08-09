@@ -1,0 +1,10 @@
+# Goal
+string user_input
+---
+# Result
+bool success
+string final_response
+---
+# Feedback (스트리밍용)
+string current_status
+string partial_word
