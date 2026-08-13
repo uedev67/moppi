@@ -1,3 +1,4 @@
+#include <ament_index_cpp/get_package_share_directory.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <behaviortree_ros2/bt_action_node.hpp>
 #include <moppi_interfaces/action/conversation.hpp>
@@ -67,22 +68,20 @@ int main(int argc, char **argv)
     params.nh = nh;
     params.default_port_value = "/start_conversation";
 
+    
+
+   // (이전 AskGpt 등록 부분은 그대로 둠)
     factory.registerNodeType<AskGptNode>("AskGpt", params);
 
-    std::string xml_text = R"(
-     <root BTCPP_format="4">
-         <BehaviorTree>
-            <Sequence>
-                <AskGpt user_text="모피야, 날씨 어때?"/>
-            </Sequence>
-         </BehaviorTree>
-     </root>
-    )";
+// 💡 패키지 경로를 찾아 XML 파일을 로드하도록 변경
+    std::string pkg_path = ament_index_cpp::get_package_share_directory("moppi_bt");
+    std::string xml_file = pkg_path + "/behavior_trees/main_tree.xml";
 
-    auto tree = factory.createTreeFromText(xml_text);
-    RCLCPP_INFO(nh->get_logger(), "🧠 Moppi의 뇌가 활성화되었습니다! 트리를 실행합니다.");
-    
-    tree.tickWhileRunning();
+// FromText가 아니라 FromFile을 사용합니다.
+    auto tree = factory.createTreeFromFile(xml_file);
+    RCLCPP_INFO(nh->get_logger(), "🧠 Moppi의 외부 XML 뇌가 활성화되었습니다!");
+
+    tree.tickWhileRunning(); 
 
     rclcpp::shutdown();
     return 0;
