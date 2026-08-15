@@ -24,7 +24,8 @@ setup(
     },
     entry_points={
         'console_scripts': [
-	  'gpt_server = moppi_action.gpt_action_server:main'
+	  'gpt_server = moppi_action.gpt_action_server:main',
+      'realtime_conversation_server = moppi_action.realtime_conversation_server:main',
         ],
     },
 )
